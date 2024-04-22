@@ -36,7 +36,7 @@ const PresalPage = () => {
       };
 
       const response = await fetch(
-        `http://localhost:5000/launchpads/${fair}/${chain}/${active}`,
+        `${process.env.NEXT_BACKEND_URL}/launchpads/${fair}/${chain}/${active}`,
         options
       );
       if (response.ok) {

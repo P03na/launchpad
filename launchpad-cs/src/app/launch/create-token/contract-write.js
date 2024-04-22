@@ -11,7 +11,7 @@ import BabyTokenFactoryAbi from "@/app/abis/BabyTokenFactoryAbi";
 import BuybackBabyTokenFactoryAbi from "@/app/abis/BuybackBabyTokenFactoryAbi";
 import PresaleAbi from "@/app/abis/PresaleAbi";
 import FairlaunchAbi from "@/app/abis/FairlaunchAbi";
-import {useRouter} from "next/navigation";
+import { useRouter } from "next/navigation";
 
 // Wagmi Config
 import { config } from "@/app/config";
@@ -23,7 +23,7 @@ const ContractWrite = async (
   currentToken,
   content = "Token Created Successfuly",
   formData = {},
-  router="",
+  router = "",
   callback = ""
 ) => {
   const key = "updatable";
@@ -33,14 +33,14 @@ const ContractWrite = async (
     currentToken === "1"
       ? standardTokenAbi
       : currentToken === "2"
-      ? LiquidityGeneratorTokenFactoryAbi
-      : currentToken === "3"
-      ? BabyTokenFactoryAbi
-      : currentToken === "4"
-      ? BuybackBabyTokenFactoryAbi
-      : currentToken === "presale"
-      ? PresaleAbi
-      : FairlaunchAbi;
+        ? LiquidityGeneratorTokenFactoryAbi
+        : currentToken === "3"
+          ? BabyTokenFactoryAbi
+          : currentToken === "4"
+            ? BuybackBabyTokenFactoryAbi
+            : currentToken === "presale"
+              ? PresaleAbi
+              : FairlaunchAbi;
 
   messageApi.open({
     key,
@@ -59,7 +59,7 @@ const ContractWrite = async (
   });
   console.log(formData, "formData");
   console.log(result, "result");
-  if (result && (currentToken === "presale" || currentToken=="fairlaunch")) {
+  if (result && (currentToken === "presale" || currentToken == "fairlaunch")) {
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
     formData.hash = result;
@@ -72,12 +72,12 @@ const ContractWrite = async (
       redirect: "follow",
     };
 
-    fetch("http://localhost:5000/launchpad/add", requestOptions)
+    fetch(`${process.env.NEXT_BACKEND_URL}/launchpad/add`, requestOptions)
       .then((response) => response.json())
       .then((result) => router.push("/launch/launchpad"))
       .catch((error) => console.error(error));
   }
- else if (result && (currentToken === "1" || currentToken === "2" ||currentToken === "3" ||currentToken === "4") ) {
+  else if (result && (currentToken === "1" || currentToken === "2" || currentToken === "3" || currentToken === "4")) {
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
     formData.hash = result;
@@ -90,7 +90,7 @@ const ContractWrite = async (
       redirect: "follow",
     };
 
-    fetch("http://localhost:5000/token/add", requestOptions)
+    fetch(`${process.env.NEXT_BACKEND_URL}/token/add`, requestOptions)
       .then((response) => response.json())
       .then((result) => router.push("/launch/create-token"))
       .catch((error) => console.error(error));

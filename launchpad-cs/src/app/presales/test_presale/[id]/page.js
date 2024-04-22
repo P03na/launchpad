@@ -47,7 +47,7 @@ import { useParams } from "next/navigation";
  */
 
 const PresalesDetails = () => {
- 
+
 
   const [affiliateLink, setAffiliateLink] = useState(
     "https://www.pinksale.finance/launchpad/0x0903f032F0cf20e1e105F49fD6C74fFFaF1Df831?chain=ETH"
@@ -68,25 +68,25 @@ const PresalesDetails = () => {
         },
       };
       const response = await fetch(
-        `http://localhost:5000/launchpads_singal/${router.id}`,
+        `${process.env.NEXT_BACKEND_URL}/launchpads_singal/${router.id}`,
         options
       );
       if (response.ok) {
         const result = await response.text();
         const parsed_data = JSON.parse(result);
         setResponseData(parsed_data.data);
-        setTokenDetail( [
+        setTokenDetail([
           {
             name: "Presale Address",
             value: parsed_data.data.owner_address,
           },
           {
             name: "Sale Type",
-            value: parsed_data.data.service =="create launchpad"?"Launchpad":"Fair Launch",
+            value: parsed_data.data.service == "create launchpad" ? "Launchpad" : "Fair Launch",
           },
           {
             name: "Token Name",
-            value:parsed_data.data.tokenName,
+            value: parsed_data.data.tokenName,
           },
           {
             name: "Token Symbol",
@@ -98,11 +98,11 @@ const PresalesDetails = () => {
           },
           {
             name: "Tokens For Presale",
-            value:1000,
+            value: 1000,
           },
           {
             name: "Tokens For Liquidity",
-            value:parsed_data.data.uniswapLiquidity,
+            value: parsed_data.data.uniswapLiquidity,
           },
           {
             name: "Initial Market Cap (estimate)",
@@ -146,12 +146,12 @@ const PresalesDetails = () => {
           },
         ])
       }
-    } catch (error) {}
+    } catch (error) { }
   };
   useEffect(() => {
     getData();
   }, []);
- 
+
   return (
     <div className="min-h-[1340px] flex flex-row gap-[30px] max-sm:flex-col">
       <div className="flex-auto w-[892px] max-sm:w-[100%] flex flex-col gap-8">
@@ -192,12 +192,12 @@ const PresalesDetails = () => {
 
           <div className="flex flex-col mt-8 px-7 pb-7">
             <p className="text-white/[.8] text-sm px-3">
-           {responseData.description}
+              {responseData.description}
             </p>
             <video controls className="mt-9">
-        <source src={responseData.yutubeUrl} type="video/mp4" />
-       
-      </video>
+              <source src={responseData.yutubeUrl} type="video/mp4" />
+
+            </video>
           </div>
           <div className="flex flex-col px-7 pt-6">
             <div className="flex flex-row justify-between items-center pb-4">
@@ -242,7 +242,7 @@ const PresalesDetails = () => {
                 className="bg-[#141414] border border-[#282828] pl-5 py-3 outline-none w-[77.2%] text-sm text-[#86888C]"
                 value={affiliateLink}
                 readOnly
-                onChange={() => {}}
+                onChange={() => { }}
               />
 
               <div className="flex flex-col items-center justify-center w-[40px] h-[100%] bg-[#141414] border-t border-[#2C2C2C] border-b border-r rounded-r-lg">
