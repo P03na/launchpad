@@ -12,6 +12,8 @@ import PresalesFavorites from "@/assets/icons/presales-favorites.svg";
 
 import Badge from "./Badge";
 import {useRouter} from "next/navigation";
+// import {useNavgation} from "next/router";
+
 import ExportedImage from "next-image-export-optimizer";
 
 const PresalesCard = ({
@@ -19,12 +21,32 @@ const PresalesCard = ({
     text = "Launchpad - Max Spots : 180",
     link = "/presales/test_presale",
     BKImage = CardOneBack,
-    IogoImage = CardOneLogo
+    IogoImage = CardOneLogo,
+    allData={}
 }) => {
     const router = useRouter();
+    const currentDate = new Date();
+
+  // Convert start date and end date strings to Date objects
+
+  
+  // Check if start date is greater than current date and end date is also greater than current date
+  // const navigation=useNavgation()
+  const endDate = new Date(allData.endDate);
+    const startDate = new Date(allData.startDate);
+    const year = startDate.getFullYear();
+    const month = String(startDate.getMonth() + 1).padStart(2, '0'); // Adding 1 because months are zero-based
+    const day = String(startDate.getDate()).padStart(2, '0');
+    const formattedstartDate = `${year}-${month}-${day}`;
+  const isSaleLive = startDate <= currentDate && endDate >= currentDate;
+  const isupComing = currentDate <=startDate;
+  const isSaleEnd = startDate <= currentDate && endDate <= currentDate;
 
     const onHandleView = () => {
-        router.push(link);
+        
+        router.push(
+            link
+        );
     };
 
     return (
@@ -42,10 +64,12 @@ const PresalesCard = ({
           alt="logo"
           className="absolute top-[76px] left-5 border-[1px] border-[#202125] rounded-full"
         /> */}
-                    <div className="flex flex-row py-1 items-center px-2 bg-[#D1FAE5] rounded-[50px] gap-1 absolute top-3 right-3">
-                        <div className="w-[8px] h-[8px] bg-[#10B981] rounded-full"></div>
-                        <p className="text-xs text-[#10B981] font-semibold">Sale Live</p>
-                    </div>
+                    <div className={`flex flex-row py-1 items-center px-2 rounded-[50px] gap-1 absolute top-3 right-3 ${isSaleLive ? 'bg-[#D1FAE5] text-[#10B981]' : isSaleEnd ? 'bg-[#FECACA] text-[#DC2626]' : 'bg-[#E5E7EB] text-gray-600'}`}>
+    <div className="w-[8px] h-[8px] rounded-full" style={{ backgroundColor: isSaleLive ? '#10B981' : isSaleEnd ? '#DC2626' : '#6B7280' }}></div>
+    <p className="text-xs font-semibold">
+        {isSaleLive ? "Sale Live" : isSaleEnd ? "Sale End" : "Upcoming"}
+    </p>
+</div>
                     <div className="pt-4 px-5 pb-5">
                         <div className="flex justify-end gap-[8px]">
                             {/* <Badge />
@@ -62,9 +86,9 @@ const PresalesCard = ({
 
                         <div className="flex justify-between mt-5 items-center">
                             <div className="flex flex-col gap-[9px]">
-                                <p className="text-white text-[22px] font-semibold">Wagmi Token-40</p>
+                                <p className="text-white text-[22px] font-semibold">{title}</p>
                                 <p className="text-white text-[14px] font-semibold">
-                                    Launchpad - Max Spots : 50
+                                    {text}
                                 </p>
                             </div>
                             {/* <ExportedImage
@@ -79,8 +103,8 @@ const PresalesCard = ({
                             </div>
 
                             <div className="flex justify-between">
-                                <p className="text-[#86888c] text-[14px]">0 BNB</p>
-                                <p className="text-[#C03F4A] text-[14px]">0 BNB</p>
+                                <p className="text-[#86888c] text-[14px]">0 {allData.currency}</p>
+                                <p className="text-[#C03F4A] text-[14px]">{allData.hardCap} {allData.currency}</p>
                             </div>
                         </div>
 
@@ -88,22 +112,22 @@ const PresalesCard = ({
                             <div className="flex justify-between items-center">
                                 <p className="text-white text-[14px]">Softcap</p>
                                 <div className="flex flex-col w-[60%] h-[1px] border border-dashed border-[#2C2C2C]"></div>
-                                <p className="text-[#C03F4A] text-[14px]">2 BNB</p>
+                                <p className="text-[#C03F4A] text-[14px]">{allData.softCap} {allData.currency}</p>
                             </div>
                             <div className="flex justify-between items-center">
                                 <p className="text-white text-[14px]">Hardcap</p>
                                 <div className="flex flex-col w-[70%] h-[1px] border border-dashed border-[#2C2C2C]"></div>
-                                <p className="text-[#C03F4A] text-[14px]">3 BNB</p>
+                                <p className="text-[#C03F4A] text-[14px]">{allData.hardCap} {allData.currency}</p>
                             </div>
                             <div className="flex justify-between items-center">
                                 <p className="text-white text-[14px]">Liquidity</p>
                                 <div className="flex flex-col w-[60%] h-[1px] border border-dashed border-[#2C2C2C]"></div>
-                                <p className="text-[#C03F4A] text-[14px]">56%</p>
+                                <p className="text-[#C03F4A] text-[14px]">{allData.uniswapLiquidity}%</p>
                             </div>
                             <div className="flex justify-between items-center">
                                 <p className="text-white text-[14px]">Locked</p>
                                 <div className="flex flex-col w-[60%] h-[1px] border border-dashed border-[#2C2C2C]"></div>
-                                <p className="text-[#C03F4A] text-[14px]">45 Days</p>
+                                <p className="text-[#C03F4A] text-[14px]">{allData.liquidityLockDays} Days</p>
                             </div>
                         </div>
                         <hr className="h-px w-[366px] mt-6 -ml-5 bg-[#2C2C2C] border-0"></hr>
@@ -111,7 +135,7 @@ const PresalesCard = ({
                         <div className="flex justify-between mt-4">
                             <div className="flex flex-col gap-2">
                                 <p className="text-[#86888C] text-[12px]">Listing Time</p>
-                                <p className="text-[#86888C] text-[16px]">2024-03-28</p>
+                                <p className="text-[#86888C] text-[16px]">{formattedstartDate}</p>
                             </div>
                             <div className="flex gap-2 items-center">
                                 <ExportedImage src={PresalesAlarm}

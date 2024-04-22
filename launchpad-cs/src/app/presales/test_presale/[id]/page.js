@@ -7,7 +7,6 @@ import BackImage from "@/assets/image/presales/back.png";
 import AvatarImage from "@/assets/image/presales/avatar.png";
 import YoutubeImage from "@/assets/image/presales/youtube.png";
 import AffiliateImage from "@/assets/image/presales/affiliate.png";
-
 import WebsiteIcon from "@/assets/icons/website-input.svg";
 import TwitterIcon from "@/assets/icons/twitter-input.svg";
 import TelegramIcon from "@/assets/icons/telegram-input.svg";
@@ -39,98 +38,128 @@ export const options = {
 
 import Map from "@/components/Map";
 import ExportedImage from "next-image-export-optimizer";
-import { useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
+
+
 /**
  *
  *
  */
 
 const PresalesDetails = () => {
-  const tokenDetails = [
-    {
-      name: "Presale Address",
-      value: "0x430....840",
-    },
-    {
-      name: "Sale Type",
-      value: "Fair Launch",
-    },
-    {
-      name: "Token Name",
-      value: "Tectum Emission Token",
-    },
-    {
-      name: "Token Symbol",
-      value: "TET",
-    },
-    {
-      name: "Total Supply",
-      value: "10,000,000",
-    },
-    {
-      name: "Tokens For Presale",
-      value: "112,500",
-    },
-    {
-      name: "Tokens For Liquidity",
-      value: "67,500",
-    },
-    {
-      name: "Initial Market Cap (estimate)",
-      value: "$181,266",
-    },
-    {
-      name: "Soft Cap",
-      value: "10 ETH",
-    },
-    {
-      name: "Presale Start Time (UTC)",
-      value: "2023-06-27 17:00",
-    },
-    {
-      name: "Presale End Time (UTC)",
-      value: "2023-06-30 17:00",
-    },
-    {
-      name: "Liquidity Percent",
-      value: "60 %",
-    },
-    {
-      name: "Liquidity Unlock Time (UTC)",
-      value: "2024-07-02 17:00",
-    },
-    {
-      name: "First Vesting Release",
-      value: "10 %",
-    },
-    {
-      name: "Vesting Delay (Cliff)",
-      value: "0 days",
-    },
-    {
-      name: "Vesting Time Period",
-      value: "30 days",
-    },
-    {
-      name: "Vesting Release per Time Period",
-      value: "10 %",
-    },
-  ];
+ 
 
   const [affiliateLink, setAffiliateLink] = useState(
     "https://www.pinksale.finance/launchpad/0x0903f032F0cf20e1e105F49fD6C74fFFaF1Df831?chain=ETH"
   );
 
-  const router = useRouter();
+  const router = useParams();
+  const [responseData, setResponseData] = useState({});
+  const [tokenDetail, setTokenDetail] = useState([{}]);
 
+  const getData = async () => {
+    try {
+      const options = {
+        method: "GET", // specify the HTTP method (GET, POST, etc.)
+        headers: {
+          "Content-Type": "application/json",
+          //'X-API-Key': '01cf1ec3aa5f80b7708c7a427c7ad87ae002c946'
+          "X-API-Key": "cfd7e02c8bf1156a5ad4ffbca315794895494a94",
+        },
+      };
+      const response = await fetch(
+        `http://localhost:5000/launchpads_singal/${router.id}`,
+        options
+      );
+      if (response.ok) {
+        const result = await response.text();
+        const parsed_data = JSON.parse(result);
+        setResponseData(parsed_data.data);
+        setTokenDetail( [
+          {
+            name: "Presale Address",
+            value: parsed_data.data.owner_address,
+          },
+          {
+            name: "Sale Type",
+            value: parsed_data.data.service =="create launchpad"?"Launchpad":"Fair Launch",
+          },
+          {
+            name: "Token Name",
+            value:parsed_data.data.tokenName,
+          },
+          {
+            name: "Token Symbol",
+            value: parsed_data.data.tokenSymbol,
+          },
+          {
+            name: "Total Supply",
+            value: parsed_data.data.tokenSupply,
+          },
+          {
+            name: "Tokens For Presale",
+            value:1000,
+          },
+          {
+            name: "Tokens For Liquidity",
+            value:parsed_data.data.uniswapLiquidity,
+          },
+          {
+            name: "Initial Market Cap (estimate)",
+            value: "$181,266",
+          },
+          {
+            name: "Soft Cap",
+            value: `${parsed_data.data.softCap} ${parsed_data.data.currency}`,
+          },
+          {
+            name: "Presale Start Time (UTC)",
+            value: parsed_data.data.startDate,
+          },
+          {
+            name: "Presale End Time (UTC)",
+            value: parsed_data.data.endDate,
+          },
+          {
+            name: "Liquidity Percent",
+            value: `${parsed_data.data.uniswapLiquidity}`,
+          },
+          {
+            name: "Liquidity Unlock Time (UTC)",
+            value: "2024-07-02 17:00",
+          },
+          {
+            name: "First Vesting Release",
+            value: "10 %",
+          },
+          {
+            name: "Vesting Delay (Cliff)",
+            value: "0 days",
+          },
+          {
+            name: "Vesting Time Period",
+            value: "30 days",
+          },
+          {
+            name: "Vesting Release per Time Period",
+            value: "10 %",
+          },
+        ])
+      }
+    } catch (error) {}
+  };
+  useEffect(() => {
+    getData();
+  }, []);
+ 
   return (
     <div className="min-h-[1340px] flex flex-row gap-[30px] max-sm:flex-col">
       <div className="flex-auto w-[892px] max-sm:w-[100%] flex flex-col gap-8">
         <div className="bg-[#1B1B1B] rounded-[16px]">
           <div className="relative">
             <ExportedImage src={BackImage} alt="back" />
-            <ExportedImage
-              src={AvatarImage}
+            <img
+              src={responseData.logoUrl}
               alt="avatar"
               className="ml-[60px] -mt-[53px]  w-auto h-auto max-w-full"
             />
@@ -163,28 +192,25 @@ const PresalesDetails = () => {
 
           <div className="flex flex-col mt-8 px-7 pb-7">
             <p className="text-white/[.8] text-sm px-3">
-              BlazeX is launching on ETH, and a crosschain bridge connecting BNB
-              and ETH with BlazeX will be available this week. Additionally, the
-              BlazeX token Deployer Bot is now active. Deploy on various chains
-              using our Telegram bot at t.me/BlazeXDeployerBot. We`re also
-              introducing the Marketing Feature soon. When you stake your tokens
-              on ETH, you can earn ETH as rewards. Plus, we`re sharing 50% of
-              the revenue with our token holders!
+           {responseData.description}
             </p>
-            <ExportedImage src={YoutubeImage} alt="image" className="mt-9" />
+            <video controls className="mt-9">
+        <source src={responseData.yutubeUrl} type="video/mp4" />
+       
+      </video>
           </div>
           <div className="flex flex-col px-7 pt-6">
             <div className="flex flex-row justify-between items-center pb-4">
               <div className="text-white text-base">Presales Address</div>
               <div className="flex flex-col items-end max-sm:w-[142px]">
-                <p className="text-base text-[#C03F4A]">0x430....840</p>
+                <p className="text-base text-[#C03F4A]">{responseData.owner_address}</p>
                 <p className="text-xs text-white">
-                  Do not send ETH directly to the presale address!
+                  Do not send {responseData.currency} directly to the presale address!
                 </p>
               </div>
             </div>
 
-            {tokenDetails.map((item, index) => {
+            {tokenDetail.map((item, index) => {
               if (index > 0) {
                 return (
                   <div

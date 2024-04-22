@@ -1,3 +1,4 @@
+"use client";
 import ColorCard from "@/components/Card/ColorCard";
 import FlashCard from "@/components/Card/FlashCard";
 import PartnerCard from "@/components/Card/PartnerCard";
@@ -9,6 +10,7 @@ import Synaps from "@/assets/icons/synaps-logo.svg";
 import Dextools from "@/assets/icons/dextools-logo.svg";
 import Floki from "@/assets/icons/floki-logo.svg";
 import HeaderSection from "@/components/HeaderSection";
+import { useState,useEffect } from "react";
 
 export default function HomePage() {
   const flash_ecosystem = [
@@ -45,6 +47,41 @@ export default function HomePage() {
       text: "Decentralized launchpad with new futures.",
     },
   ];
+
+  const [responseData, setResponseData] = useState({});
+
+  
+  const getData = async (id = "0") => {
+    try {
+      const options = {
+        method: "GET", // specify the HTTP method (GET, POST, etc.)
+        headers: {
+          "Content-Type": "application/json",
+          //'X-API-Key': '01cf1ec3aa5f80b7708c7a427c7ad87ae002c946'
+          "X-API-Key": "cfd7e02c8bf1156a5ad4ffbca315794895494a94",
+        },
+      
+      };
+
+      const response = await fetch(
+        `http://localhost:5000/dashboard`,
+        options
+      );
+      if (response.ok) {
+        const result = await response.text();
+        const parsed_data = JSON.parse(result);
+        setResponseData(parsed_data);
+      }
+      else{
+        setResponseData([])
+      }
+    } catch (error) {}
+  };
+  useEffect(() => {
+
+      getData();
+    
+  }, []);
   return (
     <div>
       <HeaderSection />
@@ -53,16 +90,18 @@ export default function HomePage() {
           Stats
         </p>
         <div className="mt-[60px] grid grid-cols-3 max-2xl:grid-cols-1 gap-[24px] justify-center items-center">
-          <StatsCard />
+          <StatsCard  text="Total Projects"
+            percent={`${responseData.ProjectCount}`}
+            value={responseData.ProjectCount} />
           <StatsCard
             text="Total Generated Tokens"
-            percent="0"
-            value="0"
+            percent={`${responseData.tokenCount}`}
+            value={responseData.tokenCount}
           />
           <StatsCard
             text="Project Raise Success Rate"
-            percent="0"
-            value="0%"
+            percent={`${responseData.SaleCount}`}
+            value={responseData.SaleCount}
           />
         </div>
         <div className="grid grid-cols-4 max-2xl:grid-cols-1 gap-[24px] justify-center gap-x-7 mt-[56px] items-center">

@@ -89,7 +89,7 @@ const HeaderNav = ({ navActive, setNavActive, navType }) => {
             index={item.key}
             onClick={(index) => {
               setActive(index);
-              // setNavActive(index);
+              setNavActive(index);
             }}
           />
         ))}

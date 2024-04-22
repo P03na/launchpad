@@ -1,9 +1,9 @@
 const Select = ({
   label = "Networks",
   optons = [
-    { text: "BSC", value: "eth" },
-    { text: "ETH", value: "bsc" },
-    { text: "opBNB", value: "opbnb" },
+    { text: "BSC", value: "0" },
+    { text: "ETH", value: "1" },
+    { text: "opBNB", value: "2" },
   ],
   changeOption
 }) => {
@@ -15,7 +15,7 @@ const Select = ({
       <div className="h-[44px] max-sm:h-[33px] pr-3 rounded-[26px] border border-[#2C2C2C]">
         <select className="xl:pl-[25px] pl-[15px] py-[10px] pr-3 max-sm:pl-[19px] max-sm:py-[4px] rounded-[26px] bg-[#141414] outline-none text-white text-[16px]" onChange={changeOption}>
           {optons.map((item, index) => (
-            <option value={item.value} key={index}>
+            <option value={item.value} key={index} onChange={changeOption}>
               {item.text}
             </option>
           ))}

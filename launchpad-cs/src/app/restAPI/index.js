@@ -15,11 +15,11 @@ const options = {
 
 const restAPI = {
     fetchTokenDetailByAddress: async (address, messageApi) => {
-        console.log(address);
+      
         const responseData = { tokenType: '', tokenName: '', tokenSymbol: '', totalSupply: '', error: '' }
         validateAccount(messageApi);
         try {
-            const response = await fetch(`https://cors-anywhere.herokuapp.com/https://rest.cryptoapis.io/blockchain-data/binance-smart-chain/testnet/addresses/${address}/contract?context=asdfg`, options);
+            const response = await fetch(`http://localhost:5000/crypto-api/${address}`, options);
             if (! response.ok) {
                 responseData.error = 'Your Token Address is not correct';
                 // throw new Error('Network response was not ok');
@@ -27,6 +27,7 @@ const restAPI = {
             }
             const result = await response.text();
             const parsed_data = JSON.parse(result)
+            console.log(parsed_data,"parsed_data");
             const { tokenType, tokenName, tokenSymbol, totalSupply } = parsed_data.data.item;
             responseData.tokenName = tokenName;
             responseData.tokenType = tokenType;
@@ -70,3 +71,4 @@ const restAPI = {
 }
 
 export default restAPI;
+

@@ -12,6 +12,8 @@ import PresalesFavorites from "@/assets/icons/presales-favorites.svg";
 
 import Badge from "./Badge";
 import {useRouter} from "next/navigation";
+// import {useNavgation} from "next/router";
+
 import ExportedImage from "next-image-export-optimizer";
 
 const Fair = ({
@@ -19,12 +21,21 @@ const Fair = ({
     text = "Launchpad - Max Spots : 180",
     link = "/presales/test_presale",
     BKImage = CardOneBack,
-    IogoImage = CardOneLogo
+    IogoImage = CardOneLogo,
+    allData={}
 }) => {
     const router = useRouter();
-
+    // const navigation=useNavgation()
+    const startDate = new Date(allData.startDate);
+    const year = startDate.getFullYear();
+    const month = String(startDate.getMonth() + 1).padStart(2, '0'); // Adding 1 because months are zero-based
+    const day = String(startDate.getDate()).padStart(2, '0');
+    const formattedstartDate = `${year}-${month}-${day}`;
     const onHandleView = () => {
-        router.push(link);
+        
+        router.push(
+            link
+        );
     };
 
     return (
@@ -62,12 +73,12 @@ const Fair = ({
 
                         <div className="flex justify-between mt-5 items-center">
                             <div className="flex flex-col gap-[9px]">
-                                <p className="text-white text-[22px] font-semibold">Wagmi Token-30</p>
+                                <p className="text-white text-[22px] font-semibold">{title}</p>
                                 <p className="text-white text-[14px] font-semibold">
-                                    Fair Launch - Max Spots : 0
+                                    {text}
                                 </p>
                             </div>
-                            {/* <ExportedImage src={Ethereum}
+                            {/* <ExportedImage
                                 alt="Image"/> */}
                         </div>
 
@@ -79,8 +90,8 @@ const Fair = ({
                             </div>
 
                             <div className="flex justify-between">
-                                <p className="text-[#86888c] text-[14px]">0 BNB</p>
-                                <p className="text-[#C03F4A] text-[14px]">0 BNB</p>
+                                <p className="text-[#86888c] text-[14px]">0 {allData.currency}</p>
+                                <p className="text-[#C03F4A] text-[14px]">{allData.hardCap} {allData.currency}</p>
                             </div>
                         </div>
 
@@ -88,22 +99,22 @@ const Fair = ({
                             <div className="flex justify-between items-center">
                                 <p className="text-white text-[14px]">Softcap</p>
                                 <div className="flex flex-col w-[60%] h-[1px] border border-dashed border-[#2C2C2C]"></div>
-                                <p className="text-[#C03F4A] text-[14px]">2 BNB</p>
+                                <p className="text-[#C03F4A] text-[14px]">{allData.softCap} {allData.currency}</p>
                             </div>
-                            {/* <div className="flex justify-between items-center">
+                            <div className="flex justify-between items-center">
                                 <p className="text-white text-[14px]">Hardcap</p>
                                 <div className="flex flex-col w-[70%] h-[1px] border border-dashed border-[#2C2C2C]"></div>
-                                <p className="text-[#C03F4A] text-[14px]">7 BNB</p>
-                            </div> */}
+                                <p className="text-[#C03F4A] text-[14px]">{allData.hardCap} {allData.currency}</p>
+                            </div>
                             <div className="flex justify-between items-center">
                                 <p className="text-white text-[14px]">Liquidity</p>
                                 <div className="flex flex-col w-[60%] h-[1px] border border-dashed border-[#2C2C2C]"></div>
-                                <p className="text-[#C03F4A] text-[14px]">64%</p>
+                                <p className="text-[#C03F4A] text-[14px]">{allData.uniswapLiquidity}%</p>
                             </div>
                             <div className="flex justify-between items-center">
                                 <p className="text-white text-[14px]">Locked</p>
                                 <div className="flex flex-col w-[60%] h-[1px] border border-dashed border-[#2C2C2C]"></div>
-                                <p className="text-[#C03F4A] text-[14px]">24300 Minutes</p>
+                                <p className="text-[#C03F4A] text-[14px]">{allData.liquidityLockDays} Days</p>
                             </div>
                         </div>
                         <hr className="h-px w-[366px] mt-6 -ml-5 bg-[#2C2C2C] border-0"></hr>
@@ -111,7 +122,7 @@ const Fair = ({
                         <div className="flex justify-between mt-4">
                             <div className="flex flex-col gap-2">
                                 <p className="text-[#86888C] text-[12px]">Listing Time</p>
-                                <p className="text-[#86888C] text-[16px]">2024-03-28</p>
+                                <p className="text-[#86888C] text-[16px]">{formattedstartDate}</p>
                             </div>
                             <div className="flex gap-2 items-center">
                                 <ExportedImage src={PresalesAlarm}

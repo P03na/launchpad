@@ -1,28 +1,51 @@
-/**
- * Launchpad: lukasz
- * Date: 10/9/13
- * Time: 8:04 PM
- */
 
-module.exports = function (mongoose) {
 
-    var LaunchpadSchema = new mongoose.Schema({
-        ownerwallet: { type: String, required: true },  // owner wallet address
-        chain: { type: String, required: true},         // token presale blockchain
-        token: { type: String, required: true},         // presale token
-        start: { type: Date, required: true},           // presale start date
-        end: { type: Date, required: true},             // presale end date
-        service: { type: String, required: true},       // create launchpad, create token, flash audit ...
-        amount: { type: Number, required: true},        // payroll amount
-        paid: { type: Number},                          // 0: not paid, pending, paid
-        badge: { type: Number},                         // 0:NONE, Audit, Cash, Bubblemaps, Doxxed, KYB, KYC
-    });
 
-    var Launchpad = mongoose.model('Launchpad', LaunchpadSchema);
+const mongoose = require("mongoose");
 
-    //put custom methods here
+const LaunchpadSchema = mongoose.Schema(
+  {
+    tokenType: { type: String },
+    tokenName: { type: String, required: true }, // presale token
+    tokenSymbol: { type: String },
+    tokenDecimals: { type: String },
+    tokenSupply: { type: String },
+    tokenAddress: { type: String },
+    currency: { type: String },
+    feeOptions: { type: String, required: true }, //0: 3.5% BNB raised only,2: 1.5$ BNB raised + 1.5% token sold
+    listingOptions: { type: String, required: true },
+    affiliateProgram: { type: String, required: true },
+    presaleRate: { type: Number, required: true },
+    whitelist: { type: String, required: true },
+    softCap: { type: Number, required: true },
+    hardCap: { type: Number, required: true },
+    minimumBuy: { type: Number, required: true },
+    maximumBuy: { type: Number, required: true },
+    refundType: { type: String, required: true },
+    router: { type: String, required: true },
+    uniswapLiquidity: { type: Number, required: true },
+    uniswapListingRate: { type: Number, required: true },
+    startDate: { type: Date, required: true },
+    endDate: { type: Date, required: true },
+    liquidityLockDays: { type: Number, required: true },
+    logoUrl: { type: String, required: true },
+    websiteUrl: { type: String, required: true },
+    facebookUrl: { type: String, required: true },
+    twitterUrl: { type: String, required: true },
+    githubUrl: { type: String, required: true },
+    telegramUrl: { type: String, required: true },
+    instagramUrl: { type: String, required: true },
+    discordUrl: { type: String, required: true },
+    redditUrl: { type: String, required: true },
+    yutubeUrl: { type: String, required: true },
+    description: { type: String },
+    needTokenCnt: { type: Number },
+    percent: { type: Number },
+    chain: { type: Number }, //0-bscscan,1-etherum,2-opbnb
+    service: { type: String, required: true }, // create launchpad, create token, flash audit ...
+    owner_address: { type: String }, // presale token
+    hash: { type: String },
+  }
+);
 
-    return {
-        Launchpad: Launchpad
-    }
-}
+module.exports = mongoose.model("Launchpad", LaunchpadSchema);

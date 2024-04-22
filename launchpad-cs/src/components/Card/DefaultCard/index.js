@@ -15,7 +15,8 @@ const DefaultCard = ({
     }
 
     return (
-        <Form form={form}
+        <Form 
+            // form={form}
             name="validateOnly"
             layout="vertical"
             onFinish={onFinish}

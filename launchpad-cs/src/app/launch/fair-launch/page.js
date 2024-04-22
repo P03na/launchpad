@@ -36,7 +36,7 @@ import getAddress from '@/app/wagmi/getAddress';
 import ContractWrite from '@/app/launch/create-token/contract-write'
 
 const FairLaunch = () => {
-
+    const walletAddress = getAddress();
     const initialState = {
         tokenType: '',
         tokenName: '',
@@ -79,7 +79,10 @@ const FairLaunch = () => {
         yutubeUrl: '',
         description: '',
         addressError: '',
-        needTokenCnt: 0
+        needTokenCnt: 0,
+        service:'create fairlaunch',
+        owner_address:walletAddress,
+        chain:""
     };
 
     const [step, setStep] = useState(1);
@@ -106,7 +109,8 @@ const FairLaunch = () => {
                   tokenName: tokenDetail.tokenName,
                   tokenType: tokenDetail.tokenType,
                   tokenSymbol: tokenDetail.tokenSymbol,
-                  totalSupply: tokenDetail.totalSupply
+                  totalSupply: tokenDetail.totalSupply,
+                  chain:tokenDetail.tokenType == "BEP-20"?0:tokenDetail.tokenType == "ERC-20"?1:2
               });
               
               setTokenAddressError('');
@@ -224,7 +228,7 @@ const FairLaunch = () => {
                new Date(formData.startDate).getTime(), new Date(formData.endDate).getTime() ];
             const type = 'fairlaunch';
             const success = 'Successful';
-            ContractWrite(address, param, messageApi, type, success, function(msg) {
+            ContractWrite(address, param, messageApi, type, success,formData,router, function(msg) {
                 router.push("/launch/fair-launch");
             });
         }

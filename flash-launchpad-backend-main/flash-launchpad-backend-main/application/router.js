@@ -10,9 +10,16 @@ exports.init = function(app, models)
 {
     var index = require('./controller');
     var user = require('./controller/user');
+    var addressofcoin = require('./controller/addressofcoin');
+    const  dashboard  = require('./controller/dashboard');
+    const  Presale  = require('./controller/Presale');
+
+
     var action = require('./controller/action');
     var visitor = require('./controller/visitor');
     const launchpad = require('./controller/launchpad');
+    const token = require('./controller/token');
+
     const notification = require('./controller/notification');
     
     /* set models */
@@ -20,12 +27,16 @@ exports.init = function(app, models)
     action.model = models.Action;
     visitor.model = models.Visitor;
     launchpad.model = models.Launchpad;
+    token.model = models.Token;
+
 
     /* user controllers */
     // admin login
     app.post('/admin/signin', user.signin); 
     // admin add
     app.post('/admin/signup', user.signup);
+    app.get('/crypto-api/:address', addressofcoin.cryptoapi);
+
 
     /* action controllers */
     // user add action
@@ -47,7 +58,15 @@ exports.init = function(app, models)
     // update launchpad
     app.post('/launchpad/update', launchpad.update);
     // get launchpads
-    app.post('/launchpads', launchpad.read);
+    app.post('/launchpads/:id/:chain/:tab', launchpad.read);
+    app.get('/launchpads_singal/:id', launchpad.readOne);
+
+
+    app.post('/presale/sale', Presale.add);
+
+
+    //add token
+    app.post('/token/add', token.add);
 
     /* notification controllers */
     // add notification

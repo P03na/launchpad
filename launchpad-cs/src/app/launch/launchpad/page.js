@@ -1,13 +1,14 @@
 "use client";
 
 import React, {useState, useEffect} from "react";
-
+import {parseEther} from 'viem'
 // ! import components
 import Input from "@/components/Form/Input";
 import DefaultSelect from "@/components/Form/DefaultSelect";
 import Warning from "@/components/Alert/Warning";
 import Moralis from 'moralis';
 import {Radio, Space, message} from 'antd';
+
 
 // ! import Icons
 import LogoURLIcon from "@/assets/icons/logoURL-input.svg";
@@ -36,7 +37,7 @@ import ContractWrite from '@/app/launch/create-token/contract-write'
 const moralisApiKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub25jZSI6ImUwNTk1NTk2LTA4NDQtNGYyMy1iMmUxLTQyZWM4ZjhiZTJlZSIsIm9yZ0lkIjoiMzI4MDcxIiwidXNlcklkIjoiMzM3MzA1IiwidHlwZUlkIjoiMWM1YzA0NzItOTg5OC00N2IyLTkzM2MtY2ZlNWMzYjk1MjA3IiwidHlwZSI6IlBST0pFQ1QiLCJpYXQiOjE2ODI4MzkzMDMsImV4cCI6NDgzODU5OTMwM30.YlHL6aBCq7qDV56PSOa9OhdChnBRiwwsT6oM3EiTG4M';
 
 const Launchpad = () => {
-
+    const walletAddress = getAddress();
     const initialState = {
         tokenType: '',
         tokenName: '',
@@ -74,17 +75,21 @@ const Launchpad = () => {
         yutubeUrl: '',
         description: '',
         addressError: '',
-        needTokenCnt: 0
+        needTokenCnt: 0,
+        service:'create launchpad',
+        owner_address:walletAddress,
+        chain:""
     };
-    
     const startMoralis = async () => {
         await Moralis.start({ apiKey: moralisApiKey });
     }
-
+    
     useEffect(() => {
         startMoralis()
-    }, []);
 
+
+    }, []);
+    
     const [step, setStep] = useState(1);
     const [tokenAddressError, setTokenAddressError] = useState("");
     const [formData, setFormData] = useState(initialState);
@@ -109,7 +114,8 @@ const Launchpad = () => {
                     tokenName: tokenDetail.tokenName,
                     tokenType: tokenDetail.tokenType,
                     tokenSymbol: tokenDetail.tokenSymbol,
-                    totalSupply: tokenDetail.totalSupply
+                    totalSupply: tokenDetail.totalSupply,
+                    chain:tokenDetail.tokenType == "BEP-20"?0:tokenDetail.tokenType == "ERC-20"?1:2
                 });
                 
                 setTokenAddressError('');
@@ -139,7 +145,6 @@ const Launchpad = () => {
     const setStartDate = (value) => {
         console.log(value);
         const originalDate = new Date(value);
-
         const year = originalDate.getFullYear();
         // JavaScript months are zero-indexed, so we add 1 to get the correct month
         const month = (originalDate.getMonth() + 1).toString().padStart(2, '0');
@@ -214,14 +219,14 @@ const Launchpad = () => {
         } else if (formData.logoUrl !== '' && formData.websiteUrl !== '' && formData.facebookUrl !== '' && formData.twitterUrl !== '' && formData.githubUrl !== '' && formData.telegramUrl !== '' && formData.instagramUrl !== '' && formData.discordUrl !== '' && formData.redditUrl !== '' && formData.yutubeUrl !== '' && step === 3) {
             setStep(4);
         } else if(step === 4) {
-            const address = '0xA3A052047610E676a560D1689031aa2585460241';
-            const param = [ formData.tokenAddress, '0xb8c77482e45f1f44de1745f52c74426c631bdd52', [formData.presaleRate, formData.uniswapListingRate], [formData.minimumBuy, formData.maximumBuy],
-                 formData.softCap, formData.hardCap, formData.uniswapLiquidity , new Date(formData.startDate).getTime(), new Date(formData.endDate).getTime() ];
+            const address = process.env.NEXT_PUBLIC_PRESALE_FACTORY;
+            const param = [ formData.tokenAddress, '0xb8c77482e45f1f44de1745f52c74426c631bdd52', [formData.presaleRate, formData.uniswapListingRate], [parseEther(formData.minimumBuy), parseEther(formData.maximumBuy)],
+            parseEther(formData.softCap), parseEther(formData.hardCap), formData.uniswapLiquidity , new Date(formData.startDate).getTime(), new Date(formData.endDate).getTime() ];
             const type = 'presale';
             const success = 'Successful';
-            ContractWrite(address, param, messageApi, type, success, function(msg) {
+            ContractWrite(address, param, messageApi, type, success,formData,router, function(msg) {
                 router.push("/launch/launchpad");
-            });
+            }); 
         }
     };
 
@@ -989,7 +994,7 @@ const Launchpad = () => {
                         alt="Warning"/>
                     <p className="text-sm text-white max-sm:text-xs break-words max-sm:w-[245px]">
                         Please exclude Flash Factory address
-                        0x78cf45A2f3a5EE1f9153d923db11feb6E4bd437d PL from fees, rewards,
+                        {process.env.NEXT_PUBLIC_PRESALE_FACTORY} PL from fees, rewards,
                                                                                                                                                                                                                                                                                                                                         max tx amount to start creating pools
                     </p>
                 </div>

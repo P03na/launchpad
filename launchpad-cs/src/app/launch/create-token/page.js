@@ -7,6 +7,7 @@ import DefaultCard from "@/components/Card/DefaultCard";
 import Success from "@/components/Alert/Success";
 import DefaultSelect from "@/components/Form/DefaultSelect";
 import { Button, message, Form } from 'antd';
+import {useRouter} from "next/navigation";
 
 // ! import Image
 import BurnImage from "@/assets/image/burn-image.png";
@@ -18,6 +19,7 @@ import BabyToken from "./BabyToken";
 import BuyBackBabyToken from "./BuyBackBabyToken";
 
 const CreateToken = () => {
+    const router=useRouter()
     const tokenType = [
         {
             text: "Standard Token",
@@ -46,24 +48,32 @@ const CreateToken = () => {
     const CreateNewToken = async (fieldsValue) => { // Standard Token
         console.log(currentToken);
         if (currentToken === '1') {
-            console.log("1`11111")
+           
             const address = '0xA9EAf37d95A30e0fC2AB6405Ce1af00b74C6757f';
             const param = [ fieldsValue.tokenName, fieldsValue.tokenSymbol, fieldsValue.tokenDecimals, fieldsValue.totalSupply ];
-            ContractWrite(address, param, messageApi, currentToken);
+            ContractWrite(address, param, messageApi, currentToken,'Token Created Successfuly',fieldsValue,router,function(msg) {
+                
+            });
             form.resetFields();
         } else if (currentToken === '2') { // Liquidity Generator c
             const address = '0xA20E5c308Fcfab355629FeB76d3bF812A10392d3';
             const param = [ fieldsValue.tokenName, fieldsValue.tokenSymbol, fieldsValue.totalSupply, fieldsValue.router, fieldsValue.marketingAddress, fieldsValue.transactionFeeToYield, fieldsValue.transactionFeeToLiquidity, fieldsValue.marketingPercent ];
-            ContractWrite(address, param, messageApi, currentToken);
+            ContractWrite(address, param, messageApi, currentToken,'Token Created Successfuly',fieldsValue,router,function(msg) {
+                
+            });
         } else if (currentToken === '3') {
             const address = '0x91F9aE081EC150983c1D464ed9d74C129a351a53';
             const param = [ fieldsValue.tokenName, fieldsValue.tokenSymbol, fieldsValue.totalSupply, [fieldsValue.rewardToken, fieldsValue.router, fieldsValue.marketingWallet, '0x73acA5510ea78AE118B1A1129a295d40Bf92dFE1'], [fieldsValue.tokenRewardFee, fieldsValue.autoAddLiquidity, fieldsValue.marketingFee], fieldsValue.minimumTokenBalance ];
-            ContractWrite(address, param, messageApi, currentToken);
+            ContractWrite(address, param, messageApi, currentToken,'Token Created Successfuly',fieldsValue,router,function(msg) {
+                
+            });
             form.resetFields();
         } else {
             const address = '0xA23BF8B4A5458bbF0Abe567Cb6DC25b69a95FbB1';
             const param = [ fieldsValue.tokenName, fieldsValue.tokenSymbol, fieldsValue.totalSupply, fieldsValue.rewardToken, fieldsValue.router, [ fieldsValue.liquidityFee, fieldsValue.buyBackFee, fieldsValue.reflectionFee, fieldsValue.marketingFee, 70 ] ];
-            ContractWrite(address, param, messageApi, currentToken);
+            ContractWrite(address, param, messageApi, currentToken,'Token Created Successfuly',fieldsValue,router,function(msg) {
+                
+            });
             form.resetFields();
         }
     }
