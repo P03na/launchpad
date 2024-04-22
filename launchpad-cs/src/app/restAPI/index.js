@@ -19,7 +19,7 @@ const restAPI = {
     const responseData = { tokenType: '', tokenName: '', tokenSymbol: '', totalSupply: '', error: '' }
     validateAccount(messageApi);
     try {
-      const response = await fetch(`${process.env.NEXT_BACKEND_URL}/crypto-api/${address}`, options);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/crypto-api/${address}`, options);
       if (!response.ok) {
         responseData.error = 'Your Token Address is not correct';
         // throw new Error('Network response was not ok');

@@ -68,7 +68,7 @@ const PresalesDetails = () => {
         },
       };
       const response = await fetch(
-        `${process.env.NEXT_BACKEND_URL}/launchpads_singal/${router.id}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/launchpads_singal/${router.id}`,
         options
       );
       if (response.ok) {

@@ -63,8 +63,9 @@ export default function HomePage() {
 
       };
 
+      console.log(process.env.NEXT_PUBLIC_BACKEND_URL, "---0-0-00-");
       const response = await fetch(
-        `${process.env.NEXT_BACKEND_URL}/dashboard`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/dashboard`,
         options
       );
       if (response.ok) {

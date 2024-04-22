@@ -72,7 +72,7 @@ const ContractWrite = async (
       redirect: "follow",
     };
 
-    fetch(`${process.env.NEXT_BACKEND_URL}/launchpad/add`, requestOptions)
+    fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/launchpad/add`, requestOptions)
       .then((response) => response.json())
       .then((result) => router.push("/launch/launchpad"))
       .catch((error) => console.error(error));
@@ -90,7 +90,7 @@ const ContractWrite = async (
       redirect: "follow",
     };
 
-    fetch(`${process.env.NEXT_BACKEND_URL}/token/add`, requestOptions)
+    fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/token/add`, requestOptions)
       .then((response) => response.json())
       .then((result) => router.push("/launch/create-token"))
       .catch((error) => console.error(error));
