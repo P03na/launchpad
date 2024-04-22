@@ -20,7 +20,7 @@ const PresalPage = () => {
   const [responseData, setResponseData] = useState([]);
 
   const address = getAddress();
- 
+
   const getData = async (id = "0") => {
     try {
       const options = {
@@ -44,21 +44,21 @@ const PresalPage = () => {
         const parsed_data = JSON.parse(result);
         setResponseData(parsed_data.data);
       }
-      else{
+      else {
         setResponseData([])
       }
-    } catch (error) {}
+    } catch (error) { }
   };
   useEffect(() => {
     if (active == "6" && address == undefined) {
       console.log("Aa");
       setResponseData([]);
     } else {
-      
+
       getData();
     }
   }, [chain, fair, active]);
-console.log(active,address,"aa");
+  console.log(active, address, "aa");
   const handleChangeOption = (e) => {
     const { value } = e.target;
     console.log(value);
@@ -68,7 +68,7 @@ console.log(active,address,"aa");
     const { value } = e.target;
     setChain(value);
   };
-console.log(responseData.length,"responseData.length");
+  console.log(responseData.length, "responseData.length");
   return (
     <div style={{ height: "100vh" }}>
       <HeaderSection />
@@ -116,8 +116,8 @@ console.log(responseData.length,"responseData.length");
         <div className="mt-[50px] grid grid-cols-4 max-sm:grid-cols-1 gap-[30px] max-sm:pb-4">
           {fair == 0 &&
             responseData &&
-            responseData.map((data) => (
-              <PresalesCard
+            responseData.map((data, index) => (
+              <PresalesCard key={index}
                 title={`${data.tokenName} Token`}
                 text="Launchpad"
                 link={`/presales/test_presale/${data._id}`}
@@ -126,8 +126,8 @@ console.log(responseData.length,"responseData.length");
             ))}
           {fair == 1 &&
             responseData &&
-            responseData.map((data) => (
-              <FairCard
+            responseData.map((data, index) => (
+              <FairCard key={index}
                 title={`${data.tokenName} Token`}
                 text="Fair Launch"
                 link={`/presales/test_presale/${data._id}`}

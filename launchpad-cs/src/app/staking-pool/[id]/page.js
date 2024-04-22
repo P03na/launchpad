@@ -11,7 +11,7 @@ import CopyIcon from "@/assets/icons/copy.svg";
 import EtherIcon from "@/assets/icons/eth.svg";
 
 import MetaIcon from "@/assets/image/metadata.jpg";
-import YellowLogoIcon from "@/assets/image/yello_logo.png";
+import YellowLogoIcon from "@/assets/image/yellow_logo.png";
 
 export const data = [
   ["Task", "Hours per Day"],
